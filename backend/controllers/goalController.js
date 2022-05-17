@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 // Goal model
 const Goal = require("../model/goalModel");
+const User = require("../model/userModel");
 
 //@desc     Get goals
 //@route    Get /api/goals
@@ -11,7 +12,8 @@ const getGoals = asyncHandler(async (req, res) => {
       as it will be destructured with the
       same order
   */
-  const goals = await Goal.find();
+
+  const goals = await Goal.find({ user: req.user });
 
   res.status(200).json(goals);
 });
@@ -26,6 +28,7 @@ const setGoals = asyncHandler(async (req, res) => {
     throw new Error("Please add a text field");
   }
   const goal = await Goal.create({
+    user: req.user,
     text: req.body.text,
   });
   res.status(200).json(goal);
@@ -35,11 +38,25 @@ const setGoals = asyncHandler(async (req, res) => {
 //@route    Put /api/goals
 //@access   Private
 const updateGoals = asyncHandler(async (req, res) => {
+  // check goal valid & exist
   const goal = await Goal.findById(req.params.id);
-
   if (!goal) {
     res.status(400);
     throw new Error("Goal not found");
+  }
+
+  // check user valid & exist
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  // make sure that goal belongs to spicefied user
+  console.log(`${goal.user}, ${user.id}`.red.underline);
+  if (goal.user.toString() !== user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
   }
 
   const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
@@ -53,10 +70,24 @@ const updateGoals = asyncHandler(async (req, res) => {
 //@route    delete /api/goals
 //@access   Private
 const deleteGoals = asyncHandler(async (req, res) => {
+  // check goal valid & exist
   const goal = await Goal.findById(req.params.id);
   if (!goal) {
     res.status(400);
     throw new Error("Goal not found");
+  }
+
+  // check user valid & exist
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  // make sure that goal belongs to spicefied user
+  if (goal.user.toString() !== user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
   }
 
   await goal.remove();
