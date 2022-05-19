@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev": "nodemon ./backEnd/server.js"
+    "server": "nodemon ./backEnd/server.js",
+    "client": "npm start --prefix frontend"
   },
   "author": "Mostafa",
   "license": "ISC",
