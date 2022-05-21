@@ -5,8 +5,10 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon ./backEnd/server.js",
-    "client": "npm start --prefix frontend"
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
+ 
   "author": "Mostafa",
   "license": "ISC",
   "dependencies": {
@@ -17,9 +19,11 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.3",
-    "mongose": "^0.0.2-security"
+    "mongose": "^0.0.2-security",
+    "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
+    "concurrently": "^7.2.0",
     "nodemon": "^2.0.16"
   },
   "repository": {

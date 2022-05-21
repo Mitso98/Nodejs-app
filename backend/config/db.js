@@ -8,7 +8,7 @@ const connectDB = async () => {
   } catch (error) {
     console.log(error);
     //end the process with faliure
-    process.end(1);
+    process.send(1);
   }
 };
 
