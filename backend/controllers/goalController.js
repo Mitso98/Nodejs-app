@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 // Goal model
 const Goal = require("../model/goalModel");
-const User = require("../model/userModel");
+
 
 //@desc     Get goals
 //@route    Get /api/goals
@@ -46,15 +46,14 @@ const updateGoals = asyncHandler(async (req, res) => {
   }
 
   // check user valid & exist
-  const user = await User.findById(req.user.id);
-  if (!user) {
+  if (!req.user) {
     res.status(400);
     throw new Error("User not found");
   }
 
   // make sure that goal belongs to spicefied user
-  console.log(`${goal.user}, ${user.id}`.red.underline);
-  if (goal.user.toString() !== user.id) {
+  console.log(`${goal.user}, ${req.user.id}`.red.underline);
+  if (goal.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
   }
@@ -77,15 +76,14 @@ const deleteGoals = asyncHandler(async (req, res) => {
     throw new Error("Goal not found");
   }
 
-  // check user valid & exist
-  const user = await User.findById(req.user.id);
-  if (!user) {
+
+  if (!req.user) {
     res.status(400);
     throw new Error("User not found");
   }
 
   // make sure that goal belongs to spicefied user
-  if (goal.user.toString() !== user.id) {
+  if (goal.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
   }

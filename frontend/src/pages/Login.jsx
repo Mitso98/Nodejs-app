@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
-import { logi, login, reset } from "../features/auth/authSlice";
+import { login, reset } from "../features/auth/authSlice";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -32,6 +32,7 @@ const Login = () => {
     }
 
     dispatch(reset());
+
   }, [user, isError, message, isSuccess, navigate, dispatch]);
 
   const onChange = (e) => {

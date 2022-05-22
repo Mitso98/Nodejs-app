@@ -68,14 +68,7 @@ const loginUser = asyncHandler(async (req, res) => {
 //@route    Get api/users/me
 //@access   Private
 const getMe = asyncHandler(async (req, res) => {
-  //we can access the user model as it the id was passed by the middleware
-  const { id, name, email } = await User.findById(req.user.id);
-
-  res.status(200).json({
-    id,
-    name,
-    email,
-  });
+  res.status(200).json(req.user);
 });
 
 // Genrate JWT
